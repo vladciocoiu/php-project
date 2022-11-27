@@ -1,0 +1,101 @@
+body {
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.login-main, .register-main, .search-main, .borrowings-main, .index-main {
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 15vh 0;
+    gap: 50px;
+}
+
+.link-wrapper {
+    display: flex;
+    gap: 30px;
+    a {
+        font-size: 1.2rem;
+    }
+}
+
+
+h1 {
+    margin: 0;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+    gap: 10px;
+}
+
+input {
+    padding: 10px;
+    width: 300px;
+}
+
+.search-form {
+    width: auto;
+    display: grid;
+    grid-template-areas: "tp tp tp"
+    "t a g"
+    "s s s";
+    .type-select {
+        width: 100px;
+        grid-area: tp;
+    }
+    .submit {
+        grid-area: s;
+    }
+    place-items: center;
+    input {
+        width: 150px;
+    }
+}
+
+.submit {
+    width: 120px;
+    padding: 10px 30px;
+}
+
+.error p {
+    color: red;
+}
+
+.items-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.borrowings-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+}
+.item {
+    text-align: center;
+    width: 400px;
+    padding: 20px;
+    border-radius: 7px;
+    box-shadow: 1px 1px 15px 0px rgba(0,0,0,0.25);
+}
+
+.borrowing {
+    text-align: center;
+    padding: 40px 80px;
+    border-radius: 7px;
+    box-shadow: 1px 1px 15px 0px rgba(0,0,0,0.25);
+}
+
+.input-hidden {
+    display: none;
+}
