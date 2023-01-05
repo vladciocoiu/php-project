@@ -25,20 +25,36 @@
         if($params['type'] == 'book') $table_name = 'books';
 
         $sql = "SELECT * FROM items JOIN " . $table_name . " ON id = item_id WHERE quantity > 0 ";
+        $params_arr = [];
+        $param_types = '';
+
         if(!empty($params['title'])) {
-            $title = $params['title'];
-            $sql = $sql."AND title = '$title' ";
+            array_push($params_arr, $params['title']);
+            $param_types .= 's';
+            $sql = $sql."AND title = ? ";
         }
         if(!empty($params['author'])) {
-            $author = $params['author'];
-            $sql = $sql."AND author = '$author' ";
+            array_push($params_arr, $params['author']);
+            $param_types .= 's';
+            $sql = $sql."AND author = ? ";
         }
         if(!empty($params['genre'])) {
-            $genre = $params['genre'];
-            $sql = $sql."AND genre = '$genre' ";
+            array_push($params_arr, $params['genre']);
+            $param_types .= 's';
+            $sql = $sql."AND genre = ? ";
         }
+        array_unshift($params_arr, $param_types);
 
-        $result = $conn->query($sql);
+        // executes a query with bound parameters, which should be safe against sql injections
+        $stmt = $conn->prepare($sql);
+        if (!empty($param_types)) {
+            call_user_func_array(array($stmt, 'bind_param'), $params_arr);
+        }
+        $stmt->execute();
+
+
+        $result = $stmt->get_result();
+
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
                 array_push($items, $row);
@@ -48,7 +64,6 @@
         }
     }
 
-    // echo count($items);
 
     $conn->close();
 ?>
@@ -86,6 +101,7 @@
                     echo "<form class='borrow-from' action='/project/borrowings' method='POST'>";
                     echo "<input type='date' name='date' min= '" .date('Y-m-d') . "' max='" . date('Y-m-d', strtotime('+2 months')) . "' class='date-input' required />";
                     echo "<input type='number' name='item_id' value='" . $item['item_id'] . "' class='input-hidden' />";
+                    echo "<input type='hidden' name='csrf_token' value='" . $_SESSION['csrf_token'] . "' />"; // for csrf protection
                     echo "<input type='submit' value='Borrow' class='submit' />";
                     echo "</form>";
                     echo "</div>";

@@ -34,9 +34,14 @@
         }
 
         if(empty($password_err) && empty($email_err)) {
-            $sql = "SELECT * FROM users WHERE email = '$email'";
+            $sql = "SELECT * FROM users WHERE email = ?";
 
-            $result = $conn->query($sql);
+            // query execution with bound parameters
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param('s', $email);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
 
             // email exists, check password
             if($result->num_rows == 1) {
@@ -51,7 +56,11 @@
                     $_SESSION["loggedin"] = true;
                     $_SESSION["id"] = $row["id"];
                     $_SESSION["email"] = $row["email"];    
-                    $_SESSION["name"] = $row["name"];                            
+                    $_SESSION["name"] = $row["name"];
+                    $_SESSION["roles"] = explode(",", $row["roles"]);
+
+                    // create a random token for csrf protection
+                    $_SESSION['csrf_token'] = md5(uniqid(mt_rand(), true));
                     
                     // Redirect user to home page
                     header("location: /project");

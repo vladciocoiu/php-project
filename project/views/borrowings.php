@@ -20,24 +20,42 @@
     $user_id = $_SESSION['id'];
 
     if($_SERVER["REQUEST_METHOD"] == "POST") {
+        // csrf protection
+        if(!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION['csrf_token']) {
+            header("location: /project");
+            exit;
+        }
+
         $date = date("Y-m-d", strtotime($_POST['date']));
+
+        // check for valid date in case of spoofing
+        if(strtotime("+2 months") < strtotime($_POST['date'])) {
+            echo "Something went wrong.";
+            exit;
+        }
+
         $item_id = $_POST['item_id'];
 
         $quant_res = $conn->query("SELECT * FROM items WHERE id = $item_id");
         $quant = $quant_res->fetch_assoc()['quantity'];
 
+        // check quantity in case of spoofing
         if($quant <= 0) {
             echo "Something went wrong.";
-        } else {
-            $update_quantity_sql = "UPDATE items SET quantity = quantity - 1 WHERE id = $item_id";
-            if ($conn->query($update_quantity_sql) === false) {
-                echo "Something went wrong.";
-            }
+            exit;
+        }
+        $update_quantity_sql = "UPDATE items SET quantity = quantity - 1 WHERE id = $item_id";
+
+        if ($conn->query($update_quantity_sql) === false) {
+            echo "Something went wrong.";
+            exit;
         }
 
         $insert_sql = "INSERT INTO borrowings (item_id, user_id, due_date) VALUES ($item_id, $user_id, '$date')";
+
         if ($conn->query($insert_sql) === false) {
             echo "Something went wrong.";
+            exit;
         }
     }
 

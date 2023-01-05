@@ -22,6 +22,12 @@
             <a href="/project/logout">Logout</a>
             <a href="/project/search">Search Items</a>
             <a href="/project/borrowings">My Borrowings</a>
+
+            <?php
+                if(isset($_SESSION["roles"]) && in_array("admin", $_SESSION["roles"]) === true) {
+                    echo ("<a href='/project/admin'>Admin Panel<a>");
+                }
+            ?>
         </div>
     </main>
 
