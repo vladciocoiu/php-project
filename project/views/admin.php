@@ -12,16 +12,8 @@
         exit;
     }
 
-    $servername = "localhost";
-    $dbusername = "root";
-    $dbpassword = "";
-    $dbname = "test";
-
-    $conn = new mysqli($servername, $dbusername, $dbpassword, $dbname);
-
-    if ($conn->connect_error) {
-        die("Connection error: " . $conn->connect_error);
-    }
+    // connect to db
+    require __DIR__."/../db_connect.php";
 
     $conn->close();
 ?>

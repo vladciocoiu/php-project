@@ -20,7 +20,7 @@
             <a href="/project/register">Register</a>
             <a href="/project/login">Login</a>
             <a href="/project/logout">Logout</a>
-            <a href="/project/search">Search Items</a>
+            <a href="/project/items">Search Items</a>
             <a href="/project/borrowings">My Borrowings</a>
 
             <?php

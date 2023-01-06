@@ -68,6 +68,10 @@ input {
     color: red;
 }
 
+.succ p {
+    color: green;
+}
+
 .items-list {
     display: flex;
     flex-direction: column;
@@ -98,4 +102,45 @@ input {
 
 .input-hidden {
     display: none;
+}
+
+.add-item-form-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.add-item-form {
+    width: 50vw;
+    height: 80vh;
+    border-radius: 10px;
+    background-color: white;
+    position: fixed;
+    top: 10vh;
+    left: 25vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.add-item-button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    background: none;
+    border: 2px solid #333;
+    border-radius: 7px;
+    transition: 0.2s ease-in-out;
+}
+
+.add-item-button:hover {
+    background: #333;
+    color: white;
 }

@@ -10,16 +10,20 @@ require_once __DIR__.'/router.php';
 // In the URL -> http://localhost
 // The output -> Index
 get('/project', 'views/index.php');
-any('/project/admin', 'views/admin.php');
-any('/project/register', 'views/register.php');
-any('/project/login', 'views/login.php');
-get('/project/logout', 'logout.php');
-get('/project/search', 'views/search.php');
-any('/project/borrowings', 'views/borrowings.php');
 
+get('/project/admin', 'views/admin.php');
+post('/project/admin', 'views/admin.php');
 
+get('/project/register', 'views/register.php');
+post('/project/register', 'views/register.php');
 
-// For GET or POST
-// The 404.php which is inside the views folder will be called
-// The 404.php has access to $_GET and $_POST
-any('/404','views/404.php');
+get('/project/login', 'views/login.php');
+post('/project/login', 'views/login.php');
+
+get('/project/logout', 'controllers/logout_controller.php');
+
+any('/project/items', 'views/items.php');
+
+get('/project/borrowings', 'views/borrowings.php');
+post('/project/borrowings', 'views/borrowings.php');
+
