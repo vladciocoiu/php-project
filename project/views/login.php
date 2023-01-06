@@ -1,4 +1,6 @@
 <?php
+    require __DIR__."/../verify_captcha.php";
+
     session_start();
     
     if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
@@ -18,9 +20,14 @@
     }
 
     $name = $password = $email = "";
-    $email_err = $password_err = $login_err = "";
+    $email_err = $password_err = $login_err = $captcha_err = "";
 
     if($_SERVER["REQUEST_METHOD"] == "POST"){
+        // verify captcha
+        if (!verifyCaptchaResponse($_POST['g-recaptcha-response'])) {
+            $captcha_err = 'You failed the captcha.';
+        }
+
         if(empty(trim($_POST["email"]))) {
             $email_err = "Please enter an email address.";
         } else {
@@ -33,7 +40,7 @@
             $password = trim($_POST["password"]);
         }
 
-        if(empty($password_err) && empty($email_err)) {
+        if(empty($captcha_err) && empty($password_err) && empty($email_err)) {
             $sql = "SELECT * FROM users WHERE email = ?";
 
             // query execution with bound parameters
@@ -83,7 +90,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css" />
-    <title>Library App</title>
+    <title>Log In</title>
+     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
     <main class="login-main">
@@ -96,10 +104,14 @@
                     echo("<div class='error'><p>". $password_err."</p></div>");
                 } elseif(!empty($login_err)) {
                     echo("<div class='error'><p>". $login_err."</p></div>");
+                } elseif(!empty($captcha_err)) {
+                    echo("<div class='error'><p>". $captcha_err."</p></div>");
                 }
             ?>
             <input type="email" placeholder="Email" name="email" required />
             <input type="password" placeholder="Password" name="password" required />
+            <br />
+            <div class="g-recaptcha" data-sitekey="6LcvrNYjAAAAAKqcfRLqVq1_Zkf-SVG9fSj7ji8g"></div>
             <input type="submit" value="Login" class="submit" />    
         </form>
         <a href="/project/register">Don't have an account? Register.</a>
