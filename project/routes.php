@@ -9,21 +9,21 @@ require_once __DIR__.'/router.php';
 // Static GET
 // In the URL -> http://localhost
 // The output -> Index
-get('/project', 'views/index.php');
+get('/project', 'controllers/home_controller.php');
 
-get('/project/admin', 'views/admin.php');
-post('/project/admin', 'views/admin.php');
+get('/project/admin', 'controllers/admin_controller.php');
 
-get('/project/register', 'views/register.php');
-post('/project/register', 'views/register.php');
+get('/project/register', 'controllers/register_controller.php');
+post('/project/register', 'controllers/register_controller.php');
 
-get('/project/login', 'views/login.php');
-post('/project/login', 'views/login.php');
+get('/project/login', 'controllers/login_controller.php');
+post('/project/login', 'controllers/login_controller.php');
 
 get('/project/logout', 'controllers/logout_controller.php');
 
-any('/project/items', 'views/items.php');
+get('/project/items', 'controllers/items_controller.php');
+post('/project/items', 'controllers/items_controller.php');
 
-get('/project/borrowings', 'views/borrowings.php');
-post('/project/borrowings', 'views/borrowings.php');
+get('/project/borrowings', 'controllers/borrowings_controller.php');
+post('/project/borrowings', 'controllers/borrowings_controller.php');
 

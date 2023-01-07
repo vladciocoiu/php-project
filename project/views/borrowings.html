@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css" />
+    <title>Library App</title>
+</head>
+<body>
+    <main class="borrowings-main">
+        <h1 class="borrowings-heading">My Borrowings</h1>
+        <div class="borrowings-list">
+            
+            {% if borrowings is not empty %}
+                {% for item in borrowings %}
+                    <div class='borrowing'>
+                        <p class='borrowing-type'>Type: {{ item.type }}</p>
+                        <p class='borrowing-title'>Title: {{ item.title }}</p>
+                        <p class='borrowing-author'>Author: {{ item.author }}</p>
+                        <p class='borrowing-genre'>Genre: {{ item.genre }}</p>
+                        <p class='borrowing-quantity'>Due Date: {{ item.due_date }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class='no-borrowings'>No borrowings found.</p>
+            {% endif %}
+
+        </div>
+    </main>
+</body>
+</html>

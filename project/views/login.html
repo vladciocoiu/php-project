@@ -1,7 +1,3 @@
-<?php
-    require __DIR__."/../controllers/login_controller.php";
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,17 +12,17 @@
     <main class="login-main">
         <h1 class="login-heading">Login</h1>
         <form class="login-form" method="POST">
-            <?php 
-                if(!empty($email_err)) {
-                    echo("<div class='error'><p>". $email_err."</p></div>");
-                } elseif(!empty($password_err)) {
-                    echo("<div class='error'><p>". $password_err."</p></div>");
-                } elseif(!empty($login_err)) {
-                    echo("<div class='error'><p>". $login_err."</p></div>");
-                } elseif(!empty($captcha_err)) {
-                    echo("<div class='error'><p>". $captcha_err."</p></div>");
-                }
-            ?>
+
+            {% if email_err is not empty %}
+                <div class='error'><p>{{ email_err }}</p></div>
+            {% elseif password_err is not empty %}
+                <div class='error'><p>{{ password_err }}</p></div>
+            {% elseif login_err is not empty %}
+                <div class='error'><p>{{ login_err }}</p></div>
+            {% elseif captcha_err is not empty %}
+                <div class='error'><p>{{ captcha_err }}</p></div>
+            {% endif %}
+
             <input type="email" placeholder="Email" name="email" required />
             <input type="password" placeholder="Password" name="password" required />
             <br />

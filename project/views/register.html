@@ -1,7 +1,3 @@
-<?php
-    require __DIR__."/../controllers/register_controller.php";
-?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,17 +12,17 @@
     <main class="register-main">
         <h1 class="register-heading">Register</h1>
         <form class="register-form" method="POST">
-            <?php 
-                if(!empty($email_err)) {
-                    echo("<div class='error'><p>". $email_err."</p></div>");
-                } elseif(!empty($password_err)) {
-                    echo("<div class='error'><p>". $password_err."</p></div>");
-                } elseif(!empty($name_err)) {
-                    echo("<div class='error'><p>". $name_err."</p></div>");
-                } elseif(!empty($captcha_err)) {
-                    echo("<div class='error'><p>". $captcha_err."</p></div>");
-                }
-            ?>
+
+            {% if email_err is not empty %}
+                <div class='error'><p>{{ email_err }}</p></div>
+            {% elseif password_err is not empty %}
+                <div class='error'><p>{{ password_err }}</p></div>
+            {% elseif name_err is not empty %}
+                <div class='error'><p>{{ name_err }}</p></div>
+            {% elseif captcha_err is not empty %}
+                <div class='error'><p>{{ captcha_err }}</p></div>
+            {% endif %}
+            
             <input type="email" placeholder="Email" name="email" required />
             <input type="text" placeholder="Name" name="name" required />
             <input type="password" placeholder="Password" name="password" required />

@@ -10,7 +10,7 @@
 
     // connect to db
     require __DIR__."/../db_connect.php";
-    
+
     $name = $password = $email = "";
     $email_err = $password_err = $login_err = $captcha_err = "";
 
@@ -73,4 +73,16 @@
     }
 
     $conn->close();
+
+    require_once 'vendor/autoload.php';
+
+    $loader = new Twig\Loader\FilesystemLoader('views');
+    $twig = new Twig\Environment($loader);
+
+    echo $twig->render('login.html', [
+        'email_err' => $email_err,
+        'password_err' => $password_err,
+        'login_err' => $login_err,
+        'captcha_err' => $captcha_err,
+    ]);
 ?>

@@ -188,6 +188,20 @@
         }
     }
 
-
     $conn->close();
+
+    require_once 'vendor/autoload.php';
+
+    $loader = new Twig\Loader\FilesystemLoader('views');
+    $twig = new Twig\Environment($loader);
+
+    echo $twig->render('items.html', [
+        'items' => $items,
+        'admin' => (isset($_SESSION["roles"]) && in_array("admin", $_SESSION["roles"])) ,
+        'validation_err' => $validation_err,
+        'validation_succ' => $validation_succ,
+        'csrf_token' => $_SESSION['csrf_token'],
+        'date_now' => date('Y-m-d'),
+        'date_max' => date('Y-m-d', strtotime('+2 months'))
+    ]);
 ?>
