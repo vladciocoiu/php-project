@@ -1,5 +1,6 @@
 <?php
     session_start();
+    session_regenerate_id();
 
     if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] === false){
         header("location: /project/login");
@@ -23,8 +24,31 @@
             exit;
         }
 
+        // fake put request
+        // admins can modify quantity of items
+        if($_POST['_method'] === 'PUT') {
+            $id = intval($_POST['item_id']);
+
+            $quantity = intval($_POST['quantity']);
+
+            if($id <= 0 || $quantity <= 0) {
+                echo "Something went wrong.";
+                exit;
+            }
+
+            $sql = 'UPDATE items SET quantity = ' . $quantity . ' WHERE id = ' . $id;
+            $result = $conn->query($sql);
+
+            if ($result === true) {
+                header("location: /project/items");
+                exit;
+            } else {
+                echo "Something went wrong";
+                exit;
+            }
+
         // fake delete request 
-        if($_POST['_method'] === 'DELETE') {
+        } elseif($_POST['_method'] === 'DELETE') {
             $id = intval($_POST['item_id']);
 
             if($id <= 0) {

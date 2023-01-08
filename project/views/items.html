@@ -69,12 +69,23 @@
                             <input type='submit' value='Borrow' class='submit' />
                         </form>
                     </div>
-                    <form class='delete-item-form' method='post'>
-                        <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
-                        <input type='hidden' name='item_id' value='{{ item.item_id }}' />
-                        <input type='hidden' name='_method' value='DELETE'>
-                        <input type='submit' value='Delete Item' class='submit' />
-                    </form>
+
+                    {% if admin %}
+                        <form class='update-quantity-form' method='post'>
+                            <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
+                            <input type='hidden' name='item_id' value='{{ item.item_id }}' />
+                            <input type='hidden' name='_method' value='PUT'>
+                            <input type='number' name='quantity' value='{{ item.quantity }}' />
+                            <input type='submit' value='Update Quantity' class='submit' />
+                        </form>
+                        <form class='delete-item-form' method='post'>
+                            <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
+                            <input type='hidden' name='item_id' value='{{ item.item_id }}' />
+                            <input type='hidden' name='_method' value='DELETE'>
+                            <input type='submit' value='Delete Item' class='submit' />
+                        </form>
+                    {% endif %}
+
                 </div>
             {% endfor %}
 
