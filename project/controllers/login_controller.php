@@ -79,6 +79,7 @@
     $conn->close();
 
     require_once 'vendor/autoload.php';
+    require_once __DIR__ . "/../load_env.php";
 
     $loader = new Twig\Loader\FilesystemLoader('views');
     $twig = new Twig\Environment($loader);
@@ -88,5 +89,6 @@
         'password_err' => $password_err,
         'login_err' => $login_err,
         'captcha_err' => $captcha_err,
+        'siteKey' => $_ENV['SITE_KEY']
     ]);
 ?>
