@@ -60,17 +60,27 @@
 
         if(empty($captcha_err) && empty($password_err) && empty($email_err) && empty($name_err)) {
             $password = password_hash(trim($_POST["password"]), PASSWORD_DEFAULT);
+            $activation_code = bin2hex(random_bytes(16));
         
-            $sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+            $sql = "INSERT INTO users (name, email, password, activation_code) VALUES (?, ?, ?, ?)";
 
             // query execution with bound parameters
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param('sss', $name, $email, $password);
+            $stmt->bind_param('ssss', $name, $email, $password, $activation_code);
             $stmt->execute();
 
             $result = $stmt->get_result();
 
             if ($stmt->errno === 0) {
+                // send activation email
+                require_once __DIR__ . "/../send_email.php";
+                require_once __DIR__ . "/../load_env.php";
+
+                $activation_link = "http://" . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'] . "/activate?email=$email&activation_code=$activation_code";
+                $subject = 'Vlad National Library Account Verification';
+                $message = "Hi $name! Please activate your Vlad National Library account by accessing  the following link: " . $activation_link;
+                sendEmail($_ENV['GMAIL_USERNAME'], 'VCI Verificator', $subject, $message, $email, $name);
+
                 header("location: /project/login");
                 exit;
             } else {

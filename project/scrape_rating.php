@@ -1,6 +1,6 @@
 <?php
-    function scrapeRating($title) {
-        $title = str_replace(' ', '+', $title);
+    function scrapeRating($title, $author) {
+        $title = str_replace(' ', '+', $title . ' - ' . $author);
 
         // url of the search query
         $url = "https://www.goodreads.com/search?utf8=%E2%9C%93&query=$title";
@@ -8,6 +8,14 @@
         $html = file_get_contents($url);
 
         $start = stripos($html, 'class="bookTitle"');
+        
+        if($start === false) {
+            return [
+                'page' => $url,
+                'rating' => 'N/A'
+            ];
+        }
+
         $end = stripos($html, '>', $offset = $start);
         $length = $end - $start;
 

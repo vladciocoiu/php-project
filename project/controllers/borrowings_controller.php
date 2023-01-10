@@ -20,7 +20,7 @@
         }
 
         // fake put request
-        // admins can modify the due date of borrowings via extension or early return
+        // admins can modify the due date of borrowings via extension or mark returned
         if ($_POST['_method'] === 'PUT') {
 
             // prevent regular users from doing this
@@ -29,26 +29,35 @@
                 exit;
             }
 
-            // check for spoofing
-            if (strtotime($_POST['date']) < strtotime("today")) {
-                echo "Something went wrong.";
-                exit;
-            }
-            
-            $date = date("Y-m-d", strtotime($_POST['date']));
-
             $id = intval($_POST['borrowing_id']);
 
-            if($id <= 0) {
+            if ($id <= 0) {
                 echo "Something went wrong.";
                 exit;
             }
+            $sql = '';
 
-            $sql = "UPDATE borrowings SET due_date = '$date' WHERE id = $id";
+            // due date extension
+            if (isset($_POST['date'])) {
+
+                // check for spoofing
+                if (strtotime($_POST['date']) < strtotime("today")) {
+                    echo "Something went wrong.";
+                    exit;
+                }
+
+                $date = date("Y-m-d", strtotime($_POST['date']));
+
+                $sql = "UPDATE borrowings SET due_date = '$date' WHERE id = $id AND returned = 0";
+
+            // mark returned
+            } else {
+                $sql = "UPDATE borrowings set returned = 1 WHERE id = $id";
+            }
 
             $result = $conn->query($sql);
             if ($result === true) {
-                header("Refresh:0");                
+                header("Refresh:0");
                 exit;
             } else {
                 echo "Something went wrong";
@@ -62,36 +71,45 @@
 
             // check for valid date in case of spoofing
             if (strtotime("+2 months") < strtotime($_POST['date'])) {
-                echo "Something went wrong.";
+                echo "Invalid date.";
                 exit;
             }
 
             $item_id = intval($_POST['item_id']);
 
-            if($id <= 0) {
-                echo "Something went wrong.";
+            if($item_id <= 0) {
+                echo "Invalid ID.";
                 exit;
             }
+
+            // check if there already is an active borrowing with the same user and item
+            $check_sql = "SELECT * FROM borrowings WHERE user_id = $user_id AND item_id = $item_id AND returned = 0";
+            $result = $conn->query($check_sql);
+            if($result->num_rows > 0) {
+                header('location: /project/items');
+                exit;
+            }
+
 
             $quant_res = $conn->query("SELECT * FROM items WHERE id = $item_id");
             $quant = $quant_res->fetch_assoc()['quantity'];
 
             // check quantity in case of spoofing
             if ($quant <= 0) {
-                echo "Something went wrong.";
+                echo "Invalid quantity.";
                 exit;
             }
             $update_quantity_sql = "UPDATE items SET quantity = quantity - 1 WHERE id = $item_id";
 
             if ($conn->query($update_quantity_sql) === false) {
-                echo "Something went wrong.";
+                echo "SQL Error.";
                 exit;
             }
 
             $insert_sql = "INSERT INTO borrowings (item_id, user_id, due_date) VALUES ($item_id, $user_id, '$date')";
 
             if ($conn->query($insert_sql) === false) {
-                echo "Something went wrong.";
+                echo "SQL Error.";
                 exit;
             }
         }
@@ -99,7 +117,7 @@
 
 
     // my borrowings
-    $sql = "SELECT b.id, b.item_id, i.type, b.due_date FROM borrowings b JOIN items i ON i.id = b.item_id WHERE b.user_id = $user_id";
+    $sql = "SELECT b.id, b.item_id, i.type, b.due_date, b.returned FROM borrowings b JOIN items i ON i.id = b.item_id WHERE b.user_id = $user_id";
     
     $result = $conn->query($sql);
     $borrowings = [];
@@ -152,7 +170,7 @@
             if($result->num_rows === 1) {
                 $id = $result->fetch_assoc()['id'];
 
-                $sql = "SELECT b.id, b.item_id, i.type, b.due_date FROM borrowings b JOIN items i ON i.id = b.item_id WHERE b.user_id = $id";
+                $sql = "SELECT b.id, b.item_id, i.type, b.due_date, b.returned FROM borrowings b JOIN items i ON i.id = b.item_id WHERE b.user_id = $id";
 
     
                 $result = $conn->query($sql);

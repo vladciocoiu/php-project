@@ -14,16 +14,25 @@
         {% endif %}
 
         <div class="link-wrapper">
-            <a href="/project/register">Register</a>
-            <a href="/project/login">Login</a>
-            <a href="/project/logout">Logout</a>
-            <a href="/project/items">Items</a>
-            <a href="/project/borrowings">Borrowings</a>
+
+            {% if not logged_in %}
+                <a href="/project/register">Register</a>
+                <a href="/project/login">Login</a>
+            {% endif %}
+
             <a href="/project/contact">Contact Us</a>
 
             {% if admin %}
-                <a href='/project/stats'>Stats<a>
+                <a href='/project/stats'>Stats</a>
             {% endif %}
+
+            {% if logged_in %}
+                <a href="/project/items">Items</a>
+                <a href="/project/borrowings">Borrowings</a>
+                <a href="/project/pdf">Generate Permit</a>
+                <a href="/project/logout">Logout</a>
+            {% endif %}
+
         </div>
     </main>
 

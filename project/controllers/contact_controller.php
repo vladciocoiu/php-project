@@ -16,7 +16,7 @@
 
 
         require_once __DIR__ . "/../send_email.php";
-        sendEmail($email, $name, $subject, $message);
+        sendEmail($email, $name, $subject, $message, 'vlad.ciocoiu0@gmail.com', 'Vlad Ciocoiu');
     }
 
     require_once 'vendor/autoload.php';

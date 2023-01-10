@@ -207,7 +207,7 @@
 
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                $item = array_merge($row, scrapeRating($row['title']));
+                $item = array_merge($row, scrapeRating($row['title'], $row['author']));
                 array_push($items, $item);
             }
         } else {

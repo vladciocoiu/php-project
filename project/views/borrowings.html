@@ -19,6 +19,13 @@
                         <p class='borrowing-title'>Title: {{ item.title }}</p>
                         <p class='borrowing-author'>Author: {{ item.author }}</p>
                         <p class='borrowing-quantity'>Due Date: {{ item.due_date }}</p>
+                        <p class='borrowing-retuned'>Status: 
+                            {% if item.returned == 1 %}
+                                <span style="color: green">Returned</span>
+                            {% else %}
+                                <span style="color: red">Not Returned</span>
+                            {% endif %}
+                        </p>
                     </div>
                 {% endfor %}
             {% else %}
@@ -37,26 +44,28 @@
             {% if search_borrowings is not empty %}
                 <div class="borrowings-list">
                     {% for borrowing in search_borrowings %}
-                        <div class='borrowing'>
-                            <p class='borrowing-type'>Type: {{ borrowing.type }}</p>
-                            <p class='borrowing-title'>Title: {{ borrowing.title }}</p>
-                            <p class='borrowing-author'>Author: {{ borrowing.author }}</p>
-                            <p class='borrowing-quantity'>Due Date: {{ borrowing.due_date }}</p>
-                            <form class='extend-date-form' method='post'>
-                                <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
-                                <input type='hidden' name='borrowing_id' value='{{ borrowing.id }}' />
-                                <input type='hidden' name='_method' value='PUT'>
-                                <input type='date' min='{{ borrowing.due_date }}' name='date' value='{{ borrowing.due_date }}' />
-                                <input type='submit' value='Extend Due Date' class='submit' />
-                            </form>
-                            <form class='early-return-form' method='post'>
-                                <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
-                                <input type='hidden' name='borrowing_id' value='{{ borrowing.id }}' />
-                                <input type='hidden' name='_method' value='PUT'>
-                                <input type='hidden' name='date' value='{{ date_now }}' />
-                                <input type='submit' value='Early Return' class='submit' />
-                            </form>
-                        </div>
+                        {% if borrowing.returned == 0 %}
+                            <div class='borrowing'>
+                                <p class='borrowing-type'>Type: {{ borrowing.type }}</p>
+                                <p class='borrowing-title'>Title: {{ borrowing.title }}</p>
+                                <p class='borrowing-author'>Author: {{ borrowing.author }}</p>
+                                <p class='borrowing-quantity'>Due Date: {{ borrowing.due_date }}</p>
+                                <form class='extend-date-form' method='post'>
+                                    <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
+                                    <input type='hidden' name='borrowing_id' value='{{ borrowing.id }}' />
+                                    <input type='hidden' name='_method' value='PUT'>
+                                    <input type='date' min='{{ borrowing.due_date }}' name='date' value='{{ borrowing.due_date }}' />
+                                    <input type='submit' value='Extend Due Date' class='submit' />
+                                </form>
+                                <form class='early-return-form' method='post'>
+                                    <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />
+                                    <input type='hidden' name='borrowing_id' value='{{ borrowing.id }}' />
+                                    <input type='hidden' name='_method' value='PUT'>
+                                    <input type='hidden' name='returned' value='1' />
+                                    <input type='submit' value='Mark Returned' class='submit' />
+                                </form>
+                            </div>
+                        {% endif %}
                     {% endfor %}
                 </div>
             {% endif %}

@@ -45,9 +45,13 @@
             // email exists, check password
             if($result->num_rows == 1) {
                 $row = $result->fetch_assoc();
+                
+                // check if account is active
+                if($row["active"] == 0) {
+                    $login_err = 'Plase check your email and activate your account.';
 
                 // password is also good => log the user in
-                if(password_verify($password, $row["password"])) {
+                } elseif(password_verify($password, $row["password"])) {
 
                     session_start();
                             

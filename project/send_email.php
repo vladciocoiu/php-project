@@ -6,7 +6,7 @@
 
   require_once __DIR__ . "/load_env.php";
 
-  function sendEmail($email, $name, $subject, $message) {
+  function sendEmail($senderEmail, $name, $subject, $message, $receiverEmail, $receiverName) {
     $mail = new PHPMailer(true);
 
     $mail->IsSMTP();
@@ -21,10 +21,10 @@
     $mail->Username = $_ENV['GMAIL_USERNAME']; // Gmail username
     $mail->Password = $_ENV['GMAIL_PASSWORD']; // Gmail password
 
-    $mail->AddReplyTo($email, $name);
+    $mail->AddReplyTo($senderEmail, $name);
 
     // set the receiver address and name
-    $mail->AddAddress('vlad.ciocoiu0@gmail.com', 'Vlad Ciocoiu');
+    $mail->AddAddress($receiverEmail, $receiverName);
 
     // set who the message is from
     $mail->SetFrom('vci.phpmailer@gmail.com', $name);
