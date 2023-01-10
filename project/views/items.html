@@ -60,6 +60,7 @@
                         <p class='item-title'>Title: {{ item.title }}</p>
                         <p class='item-author'>Author: {{ item.author }}</p>
                         <p class='item-genre'>Genre: {{ item.genre }}</p>
+                        <p class="item-rating">Rating on <a target="_blank" href="{{ item.page }}">Goodreads</a>: {{ item.rating }}</p>
                         <p class='item-quantity'>Quantity: {{ item.quantity }}</p>
 
                         <form class='borrow-form' action='/project/borrowings' method='POST'>

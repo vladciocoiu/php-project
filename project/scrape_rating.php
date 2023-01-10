@@ -42,5 +42,5 @@
         ];
 
     }
-    echo scrapeRating('On The Origin Of Species')['rating'];
+    // echo scrapeRating('On The Origin Of Species')['rating'];
 ?>

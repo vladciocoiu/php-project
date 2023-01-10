@@ -7,24 +7,21 @@
         exit;
     }
 
-    // prevent regular users from doing this
-    if(!isset($_SESSION["roles"]) || in_array("admin", $_SESSION["roles"]) === false){
-        header("location: /project");
-        exit;
-    }
-
     // connect to db
     require __DIR__."/../db_connect.php";
 
-    $conn->close();
+    require __DIR__ . "/../get_stats.php";
+
 
     require_once 'vendor/autoload.php';
 
     $loader = new Twig\Loader\FilesystemLoader('views');
     $twig = new Twig\Environment($loader);
 
-    echo $twig->render('admin.html', [
-
+    echo $twig->render('stats.html', [
+        'totalHomeViews' => getTotalHomeViews($conn),
+        'totalVisitors' => getUniqueVisitors($conn)
     ]);
 
+    $conn->close();
 ?>

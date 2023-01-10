@@ -1,6 +1,11 @@
 <?php
     require __DIR__."/../middleware/verify_captcha.php";
 
+    if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
+        header("location: /project");
+        exit;
+    }
+
     // connect to db
     require __DIR__."/../db_connect.php";
 

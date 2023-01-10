@@ -1,6 +1,7 @@
 <?php
+    require_once __DIR__ . "/../load_env.php";
     function verifyCaptchaResponse($response) {
-        $secret = '6LcvrNYjAAAAAE4YOCd4EBAVP5FRcKKFth3I4TLt';
+        $secret = $_ENV['CAPTCHA_SECRET'];
         $url = 'https://www.google.com/recaptcha/api/siteverify';
 
         $request = curl_init();

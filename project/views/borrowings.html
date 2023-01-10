@@ -18,7 +18,6 @@
                         <p class='borrowing-type'>Type: {{ item.type }}</p>
                         <p class='borrowing-title'>Title: {{ item.title }}</p>
                         <p class='borrowing-author'>Author: {{ item.author }}</p>
-                        <p class='borrowing-genre'>Genre: {{ item.genre }}</p>
                         <p class='borrowing-quantity'>Due Date: {{ item.due_date }}</p>
                     </div>
                 {% endfor %}
@@ -42,7 +41,6 @@
                             <p class='borrowing-type'>Type: {{ borrowing.type }}</p>
                             <p class='borrowing-title'>Title: {{ borrowing.title }}</p>
                             <p class='borrowing-author'>Author: {{ borrowing.author }}</p>
-                            <p class='borrowing-genre'>Genre: {{ borrowing.genre }}</p>
                             <p class='borrowing-quantity'>Due Date: {{ borrowing.due_date }}</p>
                             <form class='extend-date-form' method='post'>
                                 <input type='hidden' name='csrf_token' value='{{ csrf_token }}' />

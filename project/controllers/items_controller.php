@@ -1,4 +1,6 @@
 <?php
+    require_once __DIR__ . "/../scrape_rating.php";
+
     session_start();
     session_regenerate_id();
 
@@ -205,7 +207,8 @@
 
         if($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-                array_push($items, $row);
+                $item = array_merge($row, scrapeRating($row['title']));
+                array_push($items, $item);
             }
         } else {
             echo 'No items found.';
