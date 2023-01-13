@@ -1,10 +1,18 @@
 <?php
+    require __DIR__."/../middleware/verify_captcha.php";
+
     session_start();
     session_regenerate_id();
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // csrf protection
         if(!isset($_POST["csrf_token"]) || $_POST["csrf_token"] !== $_SESSION['csrf_token']) {
+            header("location: /project");
+            exit;
+        }
+
+        // verify captcha
+        if (!verifyCaptchaResponse($_POST['g-recaptcha-response'])) {
             header("location: /project");
             exit;
         }
@@ -26,6 +34,7 @@
 
     echo $twig->render('contact.html', [
         'csrf_token' => $_SESSION['csrf_token'],
+        'siteKey' => $_ENV['SITE_KEY']
     ]);
 
 ?>
